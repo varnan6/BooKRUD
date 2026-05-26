@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: bookrud
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: brookrud
+          property: connectionString
+
+databases:
+  - name: bookrud
+    databaseName: bookrud_db
+    user: bookrud_user
+    plan: free

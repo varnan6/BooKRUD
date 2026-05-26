@@ -9,7 +9,7 @@ if not db_password:
     raise ValueError("CRITICAL: DATABASE_PASSWORD environment variable is not set.")
 
 # 2. Safely construct the connection URL
-DATABASE_URL = f"postgresql://postgres:{db_password}@vlexmdmbsojlcsnqgklt.pooler.supabase.com:5432/postgres"
+DATABASE_URL = f"postgresql://postgres.vlexmdmbsojlcsnqgklt:{db_password}@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
 
 # 3. Initialize SQLAlchemy components
 engine = create_engine(DATABASE_URL)

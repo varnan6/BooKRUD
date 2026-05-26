@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from typing import List
@@ -7,14 +8,25 @@ import models
 import schemas
 import crud
 
-# Create all tables on startup
-Base.metadata.create_all(bind=engine)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
-    title="BooKRUD: A Library Management System",
+    title="Library Management System",
     description="A backend REST API to manage books using FastAPI & PostgreSQL",
     version="1.0.0"
 )
+
+
+@app.on_event("startup")
+def startup():
+    logger.info("Starting up — attempting DB connection...")
+    try:
+        Base.metadata.create_all(bind=engine)
+        logger.info("✅ Database tables created successfully.")
+    except Exception as e:
+        logger.error(f"❌ Database connection failed: {e}")
+        raise e
 
 
 # Dependency: get DB session per request
@@ -28,7 +40,7 @@ def get_db():
 
 @app.get("/", tags=["Root"])
 def root():
-    return {"message": "Welcome to BooKRUD API"}
+    return {"message": "Welcome to the Library Management System API"}
 
 
 # ─── CREATE ───────────────────────────────────────────────────────────────────
